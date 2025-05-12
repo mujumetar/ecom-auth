@@ -42,15 +42,15 @@ const Login = () => {
             const res = await createUserWithEmailAndPassword(auth, formdata.email, formdata.password)
             const users = res.user
 
-            await updateProfile(users, {
-                displayName: formdata.name,
-                photoURL: formdata.img
-            })
+            // await updateProfile(users, {
+            //     displayName: formdata.name,
+            //     photoURL: formdata.img
+            // })
 
-            let cUser = auth.currentUser
-            dispatch(login({ name: cUser.displayName, email: cUser.email, img: cUser.photoURL }))
+            // let cUser = auth.currentUser
+            // dispatch(login({ name: cUser.displayName, email: cUser.email, img: cUser.photoURL }))
 
-            toast.success("Sign UP successfull...!")
+            // toast.success("Sign UP successfull...!")
 
         } catch (error) {
             console.log(error.code)
@@ -70,6 +70,10 @@ const Login = () => {
 
             console.log(auth.currentUser)
             toast.success("login successfull...!")
+            if(users){
+                console.log(users)
+                dispatch(login({username :users.displayName, email : users.email, key:users.key}))
+            }
         } catch (error) {
             console.log(error.code)
             console.log(error.message)
@@ -127,10 +131,9 @@ const Login = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
-                <br></br>
-                <div id="hidden">
+
+
+                         <div id="hidden">
                     <div className="flex flex-col gap-7 border p-5">
                         Login
                         <input type="text" placeholder='email' name="email" onChange={handleForm} className='border p-3 text-xl' />
@@ -139,6 +142,10 @@ const Login = () => {
                         <button onClick={handleLog} className='rounded py-1 px-4 bg-green-600'>Login</button>
                     </div>
                 </div>
+                    </div>
+                </section>
+                <br></br>
+               
 
             </div>
 

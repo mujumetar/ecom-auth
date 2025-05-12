@@ -28,27 +28,39 @@ function App() {
 
 
   useEffect(() => {
-    if (first) {
-      setFirst(false)
-      return;
-    }
+    // if (first) {
+    //   setFirst(false)
+    //   return;
+    // }
 
-    dispatch(postDataApi(cartData, auth.key))
+    // dispatch(postDataApi(cartData, auth))
+
+    const fetchData = async () => {
+
+      const res = await fetch(`https://e-com-e88fa-default-rtdb.firebaseio.com/cart.json`,
+        {
+          method: "PUT",
+          body: JSON.stringify( cartData )
+        })
+      const data = await res.json();
+      return data;
+    }
+    fetchData()
   }, [cartData])
 
 
+console.log(cartData)
 
+return (
 
-  return (
-
-    <>
-      {alert.status && <Alert alert={alert} />}
-      {auth && <Navbar />}
-      {!auth && <Login />}
-      {auth && <Products />}
-      {showCart && <Cart />}
-    </>
-  )
+  <>
+    {alert.status && <Alert alert={alert} />}
+    {auth && <Navbar />}
+    {!auth && <Login />}
+    {auth && <Products />}
+    {showCart && <Cart />}
+  </>
+)
 }
 
 export default App
