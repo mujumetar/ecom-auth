@@ -21,22 +21,19 @@ function App() {
   let showCart = useSelector(state => state.cart.showCart)
   const [first, setFirst] = useState(true)
 
-  // console.log(cart)
-  // console.log(auth)
+  console.log(cart)
+  console.log(auth)
 
   const dispatch = useDispatch()
 
 
   useEffect(() => {
-
     if (first) {
       setFirst(false)
       return;
     }
 
     dispatch(postDataApi(cartData, auth.key))
-
-
   }, [cartData])
 
 
@@ -49,12 +46,7 @@ function App() {
       {auth && <Navbar />}
       {!auth && <Login />}
       {auth && <Products />}
-
       {showCart && <Cart />}
-
-
-
-
     </>
   )
 }
