@@ -1,16 +1,19 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { login } from '../features/authSlice'
+import { login, logout } from '../features/authSlice'
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signInWithPopup, updateProfile, GoogleAuthProvider, onAuthStateChanged, setPersistence, browserLocalPersistence } from 'firebase/auth';
 
 import { ToastContainer, toast } from 'react-toastify';
-
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import app from '../firebaseconfig';
 import { current } from '@reduxjs/toolkit';
 
 
 
 const Login = () => {
+
+
+    const provider = new GoogleAuthProvider(app)
+
 
     const auth = getAuth(app)
     const [formdata, setFormData] = useState({ name: "", img: "", email: "", password: "" })
@@ -35,6 +38,30 @@ const Login = () => {
 
     }
 
+
+    const handleGoogles = async () => {
+        let res = await signInWithPopup(auth, provider)
+        let cUser = auth.currentUser;
+        toast.success("Sign UP successfull...!")
+    }
+
+
+    useEffect(() => {
+
+
+        setPersistence(auth, browserLocalPersistence)
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                dispatch(login({ name: user.displayName, email: user.email, img: user.photoURL }))
+            }
+            else {
+                dispatch(logout())
+            }
+        })
+
+
+    }, [auth,])
+
     async function handleReg() {
 
         try {
@@ -42,15 +69,7 @@ const Login = () => {
             const res = await createUserWithEmailAndPassword(auth, formdata.email, formdata.password)
             const users = res.user
 
-            // await updateProfile(users, {
-            //     displayName: formdata.name,
-            //     photoURL: formdata.img
-            // })
 
-            // let cUser = auth.currentUser
-            // dispatch(login({ name: cUser.displayName, email: cUser.email, img: cUser.photoURL }))
-
-            // toast.success("Sign UP successfull...!")
 
         } catch (error) {
             console.log(error.code)
@@ -70,9 +89,9 @@ const Login = () => {
 
             console.log(auth.currentUser)
             toast.success("login successfull...!")
-            if(users){
+            if (users) {
                 console.log(users)
-                dispatch(login({username :users.displayName, email : users.email, key:users.key}))
+                dispatch(login({ username: users.displayName, email: users.email, key: users.key }))
             }
         } catch (error) {
             console.log(error.code)
@@ -133,19 +152,24 @@ const Login = () => {
                         </div>
 
 
-                         <div id="hidden">
-                    <div className="flex flex-col gap-7 border p-5">
-                        Login
-                        <input type="text" placeholder='email' name="email" onChange={handleForm} className='border p-3 text-xl' />
-                        <input type="text" placeholder='password' name="password" onChange={handleForm} className='border p-3 text-xl' />
+                        <div id="hidden">
+                            <div className="flex flex-col gap-7 border p-5">
+                                Login
+                                <input type="text" placeholder='email' name="email" onChange={handleForm} className='border p-3 text-xl' />
+                                <input type="text" placeholder='password' name="password" onChange={handleForm} className='border p-3 text-xl' />
 
-                        <button onClick={handleLog} className='rounded py-1 px-4 bg-green-600'>Login</button>
-                    </div>
-                </div>
+                                <button onClick={handleLog} className='rounded py-1 px-4 bg-green-600'>Login</button>
+                            </div>
+                            <div className='flex justify-around'>
+                                <button onClick={() => handleGoogles()} className='shadow rounded-full bg-slate-100 hover:bg-slate-300 overflow-hidden '><img className='w-[40px]' src="https://cdn-icons-png.flaticon.com/128/300/300221.png" alt="" /></button>
+                                <button className='shadow rounded-full bg-slate-100 hover:bg-slate-300 overflow-hidden '><img className='w-[40px]' src="https://cdn-icons-png.flaticon.com/128/733/733547.png" alt="" /></button>
+                                <button className='shadow rounded-full bg-slate-100 hover:bg-slate-300 overflow-hidden '><img className='w-[40px]' src="https://cdn-icons-png.flaticon.com/128/3291/3291695.png" alt="" /></button>
+                            </div>
+                        </div>
                     </div>
                 </section>
                 <br></br>
-               
+
 
             </div>
 
