@@ -162,8 +162,7 @@ const Login = () => {
                             </div>
                             <div className='flex justify-around'>
                                 <button onClick={() => handleGoogles()} className='shadow rounded-full bg-slate-100 hover:bg-slate-300 overflow-hidden '><img className='w-[40px]' src="https://cdn-icons-png.flaticon.com/128/300/300221.png" alt="" /></button>
-                                <button className='shadow rounded-full bg-slate-100 hover:bg-slate-300 overflow-hidden '><img className='w-[40px]' src="https://cdn-icons-png.flaticon.com/128/733/733547.png" alt="" /></button>
-                                <button className='shadow rounded-full bg-slate-100 hover:bg-slate-300 overflow-hidden '><img className='w-[40px]' src="https://cdn-icons-png.flaticon.com/128/3291/3291695.png" alt="" /></button>
+                                
                             </div>
                         </div>
                     </div>
